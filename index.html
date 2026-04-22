@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pawankumar Thippabattini — Data Engineer</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #0a0f1c;
+    --bg-2: #0f1627;
+    --card: #121a2e;
+    --card-hover: #17203a;
+    --border: #1f2a44;
+    --text: #e6ebf5;
+    --text-dim: #9aa4b8;
+    --text-muted: #6b7487;
+    --accent: #5eead4;
+    --accent-2: #7c9bff;
+    --accent-3: #c084fc;
+    --grad: linear-gradient(135deg, #5eead4 0%, #7c9bff 50%, #c084fc 100%);
+    --shadow: 0 10px 40px -10px rgba(0,0,0,0.5);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* Animated background blobs */
+  .bg-blobs { position: fixed; inset: 0; z-index: -1; overflow: hidden; pointer-events: none; }
+  .blob {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.15;
+    animation: float 20s infinite ease-in-out;
+  }
+  .blob-1 { width: 500px; height: 500px; background: #5eead4; top: -100px; left: -100px; }
+  .blob-2 { width: 600px; height: 600px; background: #7c9bff; top: 40%; right: -200px; animation-delay: -7s; }
+  .blob-3 { width: 450px; height: 450px; background: #c084fc; bottom: -100px; left: 30%; animation-delay: -14s; }
+  @keyframes float {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(40px, -40px) scale(1.1); }
+    66% { transform: translate(-30px, 30px) scale(0.95); }
+  }
+
+  /* Nav */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    padding: 20px 40px;
+    background: rgba(10, 15, 28, 0.7);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid transparent;
+    z-index: 100;
+    transition: border-color 0.3s;
+  }
+  nav.scrolled { border-bottom-color: var(--border); }
+  .nav-inner {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .logo {
+    font-weight: 800;
+    font-size: 1.2rem;
+    background: var(--grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    letter-spacing: -0.02em;
+  }
+  .nav-links { display: flex; gap: 32px; list-style: none; }
+  .nav-links a {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 0.92rem;
+    font-weight: 500;
+    transition: color 0.2s;
+    position: relative;
+  }
+  .nav-links a::after {
+    content: '';
+    position: absolute;
+    bottom: -6px; left: 0;
+    width: 0; height: 2px;
+    background: var(--grad);
+    transition: width 0.3s;
+  }
+  .nav-links a:hover { color: var(--text); }
+  .nav-links a:hover::after { width: 100%; }
+
+  /* Container */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  section { padding: 100px 0; position: relative; }
+
+  .section-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--accent);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-label::before {
+    content: '';
+    width: 24px; height: 1px;
+    background: var(--accent);
+  }
+  .section-title {
+    font-size: clamp(2rem, 4vw, 2.8rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: 48px;
+    line-height: 1.1;
+  }
+
+  /* Hero */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    padding: 120px 0 80px;
+  }
+  .hero-content { max-width: 900px; }
+  .hero-hello {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--accent);
+    font-size: 1rem;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease-out 0.1s forwards;
+  }
+  .hero-name {
+    font-size: clamp(2.8rem, 7vw, 5rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    margin-bottom: 12px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease-out 0.25s forwards;
+  }
+  .hero-title {
+    font-size: clamp(1.8rem, 5vw, 3rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    color: var(--text-dim);
+    margin-bottom: 28px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease-out 0.4s forwards;
+  }
+  .gradient-text {
+    background: var(--grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .hero-desc {
+    font-size: 1.15rem;
+    color: var(--text-dim);
+    max-width: 640px;
+    margin-bottom: 40px;
+    opacity: 0;
+    animation: fadeUp 0.6s ease-out 0.55s forwards;
+  }
+  .hero-ctas {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.6s ease-out 0.7s forwards;
+  }
+  .btn {
+    padding: 14px 28px;
+    border-radius: 10px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.25s ease;
+    border: 1px solid transparent;
+    cursor: pointer;
+  }
+  .btn-primary {
+    background: var(--grad);
+    color: #0a0f1c;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 30px -10px rgba(94, 234, 212, 0.5); }
+  .btn-ghost {
+    background: transparent;
+    color: var(--text);
+    border-color: var(--border);
+  }
+  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-2px); }
+
+  .hero-contact {
+    margin-top: 48px;
+    display: flex;
+    gap: 28px;
+    flex-wrap: wrap;
+    opacity: 0;
+    animation: fadeUp 0.6s ease-out 0.85s forwards;
+  }
+  .hero-contact a {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-size: 0.92rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.2s;
+  }
+  .hero-contact a:hover { color: var(--accent); }
+  .hero-contact svg { width: 16px; height: 16px; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* About */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 60px;
+    align-items: start;
+  }
+  .about-text p {
+    color: var(--text-dim);
+    margin-bottom: 20px;
+    font-size: 1.02rem;
+  }
+  .about-text strong { color: var(--text); font-weight: 600; }
+  .stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .stat {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px 20px;
+    transition: all 0.3s;
+  }
+  .stat:hover { border-color: var(--accent); transform: translateY(-4px); }
+  .stat-num {
+    font-size: 2rem;
+    font-weight: 800;
+    background: var(--grad);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    line-height: 1;
+    letter-spacing: -0.02em;
+  }
+  .stat-label {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-top: 8px;
+  }
+
+  /* Skills */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  .skill-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 24px;
+    transition: all 0.3s;
+  }
+  .skill-card:hover { background: var(--card-hover); border-color: var(--accent); transform: translateY(-4px); }
+  .skill-card h4 {
+    font-size: 0.85rem;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 14px;
+  }
+  .skill-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .tag {
+    padding: 5px 12px;
+    background: rgba(94, 234, 212, 0.08);
+    border: 1px solid rgba(94, 234, 212, 0.2);
+    border-radius: 999px;
+    font-size: 0.82rem;
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* Experience timeline */
+  .exp-tabs {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 40px;
+  }
+  .tab-list {
+    display: flex;
+    flex-direction: column;
+    border-left: 2px solid var(--border);
+  }
+  .tab-btn {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    padding: 14px 20px;
+    text-align: left;
+    cursor: pointer;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.88rem;
+    border-left: 2px solid transparent;
+    margin-left: -2px;
+    transition: all 0.2s;
+    line-height: 1.4;
+  }
+  .tab-btn:hover { background: var(--card); color: var(--accent); }
+  .tab-btn.active {
+    color: var(--accent);
+    border-left-color: var(--accent);
+    background: var(--card);
+  }
+  .tab-content { display: none; animation: fadeIn 0.4s; }
+  .tab-content.active { display: block; }
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .exp-role {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .exp-role span { color: var(--accent); }
+  .exp-meta {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    margin-bottom: 24px;
+  }
+  .exp-list {
+    list-style: none;
+  }
+  .exp-list li {
+    padding-left: 24px;
+    margin-bottom: 14px;
+    color: var(--text-dim);
+    position: relative;
+    font-size: 0.98rem;
+  }
+  .exp-list li::before {
+    content: '▹';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
+    font-size: 0.9rem;
+  }
+
+  /* Projects */
+  .projects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 24px;
+  }
+  .project-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 32px 28px;
+    transition: all 0.35s ease;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+  }
+  .project-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 3px;
+    background: var(--grad);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .project-card:hover {
+    transform: translateY(-6px);
+    background: var(--card-hover);
+    border-color: rgba(94, 234, 212, 0.3);
+    box-shadow: var(--shadow);
+  }
+  .project-card:hover::before { opacity: 1; }
+  .project-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, rgba(94, 234, 212, 0.15), rgba(124, 155, 255, 0.15));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    font-size: 1.5rem;
+  }
+  .project-title {
+    font-size: 1.2rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    letter-spacing: -0.01em;
+  }
+  .project-client {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-bottom: 14px;
+  }
+  .project-desc {
+    color: var(--text-dim);
+    font-size: 0.95rem;
+    margin-bottom: 20px;
+    flex: 1;
+  }
+  .project-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: auto;
+  }
+  .project-tags .tag { font-size: 0.75rem; padding: 4px 10px; }
+
+  /* Contact */
+  .contact-section { text-align: center; padding: 120px 0; }
+  .contact-section .section-label { justify-content: center; }
+  .contact-section .section-label::before { display: none; }
+  .contact-section h2 {
+    font-size: clamp(2.2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: 24px;
+  }
+  .contact-section p {
+    color: var(--text-dim);
+    font-size: 1.1rem;
+    max-width: 540px;
+    margin: 0 auto 40px;
+  }
+
+  footer {
+    text-align: center;
+    padding: 30px 40px;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-family: 'JetBrains Mono', monospace;
+    border-top: 1px solid var(--border);
+  }
+
+  /* Mobile */
+  @media (max-width: 768px) {
+    nav { padding: 16px 20px; }
+    .nav-links { gap: 18px; }
+    .nav-links a { font-size: 0.82rem; }
+    .container { padding: 0 20px; }
+    section { padding: 70px 0; }
+    .about-grid { grid-template-columns: 1fr; gap: 32px; }
+    .exp-tabs { grid-template-columns: 1fr; }
+    .tab-list {
+      flex-direction: row;
+      overflow-x: auto;
+      border-left: none;
+      border-bottom: 2px solid var(--border);
+    }
+    .tab-btn {
+      border-left: none;
+      border-bottom: 2px solid transparent;
+      margin-left: 0;
+      margin-bottom: -2px;
+      white-space: nowrap;
+    }
+    .tab-btn.active { border-left-color: transparent; border-bottom-color: var(--accent); }
+    .hero-ctas { flex-direction: column; align-items: stretch; }
+    .btn { justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-blobs">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="blob blob-3"></div>
+</div>
+
+<nav id="nav">
+  <div class="nav-inner">
+    <div class="logo">PT.</div>
+    <ul class="nav-links">
+      <li><a href="#about">About</a></li>
+      <li><a href="#skills">Skills</a></li>
+      <li><a href="#experience">Experience</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<main class="container">
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-content">
+      <div class="hero-hello">Hi, my name is</div>
+      <h1 class="hero-name">Pawankumar Thippabattini.</h1>
+      <h2 class="hero-title">I build <span class="gradient-text">AI-ready data platforms.</span></h2>
+      <p class="hero-desc">
+        Data Engineer with 9+ years of experience designing scalable ETL/ELT
+        pipelines and AI-driven data platforms across healthcare, finance, and
+        retail. I specialize in Python, Spark, and AWS — turning high-volume,
+        messy data into reliable systems that power analytics, ML, and real
+        business decisions.
+      </p>
+      <div class="hero-ctas">
+        <a href="#projects" class="btn btn-primary">View My Work
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+        </a>
+        <a href="mailto:thippabattinipawan@gmail.com" class="btn btn-ghost">Get in Touch</a>
+      </div>
+      <div class="hero-contact">
+        <a href="mailto:thippabattinipawan@gmail.com">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          thippabattinipawan@gmail.com
+        </a>
+        <a href="tel:+14122863837">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          +1 (412) 286-3837
+        </a>
+        <a href="https://www.linkedin.com/in/tpawankumar/" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z"/></svg>
+          LinkedIn
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about">
+    <div class="section-label">01. About Me</div>
+    <h2 class="section-title">A bit about who I am</h2>
+    <div class="about-grid">
+      <div class="about-text">
+        <p>
+          I'm a <strong>Data Engineer</strong> with 9+ years of experience taking
+          unruly, large-scale data and shaping it into systems people can actually
+          rely on. I've designed and shipped AI-driven data platforms across
+          <strong>healthcare, financial services, and retail</strong> — processing
+          everything from EHR and claims data to real-time financial transactions,
+          POS feeds, and ML training datasets.
+        </p>
+        <p>
+          My toolkit is centered on <strong>Python, SQL, and Apache Spark</strong>,
+          deployed on <strong>AWS</strong> (S3, Glue, Lambda, EMR, Redshift,
+          SageMaker) and <strong>Azure</strong>. I build ML-ready data pipelines
+          and feature stores, and have delivered HIPAA-compliant platforms at
+          Mercy Health and real-time Kafka streams powering fraud detection at
+          Prudential — while optimizing workflows that cut processing time by
+          over <strong>30%</strong>.
+        </p>
+        <p>
+          Beyond the code, I care deeply about <strong>data quality, governance,
+          and reliability</strong> — because a pipeline is only as valuable as
+          the trust people place in it. I enjoy mentoring junior engineers,
+          partnering with data scientists on feature engineering and MLOps, and
+          translating ambiguous business requirements into scalable data
+          solutions.
+        </p>
+      </div>
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-num">9+</div>
+          <div class="stat-label">Years building<br/>data platforms</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">30%+</div>
+          <div class="stat-label">Average pipeline<br/>performance gain</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">3</div>
+          <div class="stat-label">Industries:<br/>Healthcare · Finance · Retail</div>
+        </div>
+        <div class="stat">
+          <div class="stat-num">40%</div>
+          <div class="stat-label">Manual effort<br/>reduced via automation</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SKILLS -->
+  <section id="skills">
+    <div class="section-label">02. Skills &amp; Tech</div>
+    <h2 class="section-title">The tools I work with</h2>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <h4>Languages</h4>
+        <div class="skill-tags">
+          <span class="tag">Python</span>
+          <span class="tag">SQL</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h4>Big Data</h4>
+        <div class="skill-tags">
+          <span class="tag">Apache Spark</span>
+          <span class="tag">PySpark</span>
+          <span class="tag">Kafka</span>
+          <span class="tag">Spark Streaming</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h4>Cloud — AWS</h4>
+        <div class="skill-tags">
+          <span class="tag">S3</span>
+          <span class="tag">Glue</span>
+          <span class="tag">Lambda</span>
+          <span class="tag">EMR</span>
+          <span class="tag">Redshift</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h4>Cloud — Azure</h4>
+        <div class="skill-tags">
+          <span class="tag">Data Factory</span>
+          <span class="tag">Data Lake</span>
+          <span class="tag">Synapse</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h4>Data Warehousing</h4>
+        <div class="skill-tags">
+          <span class="tag">Snowflake</span>
+          <span class="tag">Redshift</span>
+          <span class="tag">Databricks</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h4>Data Engineering</h4>
+        <div class="skill-tags">
+          <span class="tag">ETL / ELT</span>
+          <span class="tag">Data Modeling</span>
+          <span class="tag">Data Lakes</span>
+          <span class="tag">Batch &amp; Streaming</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h4>AI &amp; ML Data Platform</h4>
+        <div class="skill-tags">
+          <span class="tag">ML Data Pipelines</span>
+          <span class="tag">Feature Stores</span>
+          <span class="tag">Feast</span>
+          <span class="tag">Tecton</span>
+          <span class="tag">SageMaker</span>
+          <span class="tag">MLOps</span>
+          <span class="tag">Feature Engineering</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h4>Orchestration &amp; DevOps</h4>
+        <div class="skill-tags">
+          <span class="tag">Apache Airflow</span>
+          <span class="tag">Git</span>
+          <span class="tag">CI/CD</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h4>Integration &amp; APIs</h4>
+        <div class="skill-tags">
+          <span class="tag">REST APIs</span>
+          <span class="tag">Microservices</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h4>Visualization</h4>
+        <div class="skill-tags">
+          <span class="tag">Power BI</span>
+          <span class="tag">Tableau</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h4>Core Practices</h4>
+        <div class="skill-tags">
+          <span class="tag">Data Governance</span>
+          <span class="tag">Data Quality</span>
+          <span class="tag">Performance Tuning</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="section-label">03. Where I've Worked</div>
+    <h2 class="section-title">Experience</h2>
+    <div class="exp-tabs">
+      <div class="tab-list" role="tablist">
+        <button class="tab-btn active" data-tab="0">Mercy Health</button>
+        <button class="tab-btn" data-tab="1">Prudential Financial</button>
+        <button class="tab-btn" data-tab="2">Wild Fork Foods</button>
+        <button class="tab-btn" data-tab="3">Aufait Technologies</button>
+        <button class="tab-btn" data-tab="4">Metalyst Forgings</button>
+      </div>
+      <div class="tab-panels">
+        <div class="tab-content active">
+          <div class="exp-role">Sr. Data Engineer with AI <span>@ Mercy Health</span></div>
+          <div class="exp-meta">Cincinnati, OH · Healthcare · Feb 2025 – Present</div>
+          <ul class="exp-list">
+            <li>Architected scalable, AI-integrated data engineering solutions for large-scale healthcare data including EHR, claims, and clinical datasets across multiple hospital systems.</li>
+            <li>Implemented AI/ML data pipelines to support predictive analytics use cases such as patient risk scoring, readmission prediction, and operational forecasting.</li>
+            <li>Partnered with data scientists to enable feature engineering, model training, and deployment pipelines within the broader data ecosystem.</li>
+            <li>Built HIPAA-compliant pipelines with encryption, access controls, and governance policies — ensuring data privacy and regulatory compliance.</li>
+            <li>Implemented distributed processing with Apache Spark and PySpark, optimizing ETL workflows via partitioning and indexing to reduce latency on massive datasets.</li>
+            <li>Automated ingestion and orchestration with Apache Airflow, improving reliability and reducing manual intervention across complex workflows.</li>
+            <li>Led and mentored a team of data engineers, enforcing best practices in code quality, scalability, and system design.</li>
+          </ul>
+        </div>
+        <div class="tab-content">
+          <div class="exp-role">Data Engineer with AI <span>@ Prudential Financial</span></div>
+          <div class="exp-meta">Newark, NJ · Financial Services · Sep 2023 – Jan 2025</div>
+          <ul class="exp-list">
+            <li>Designed cloud-native data architectures on AWS (S3, Glue, Lambda, EMR) to support scalable and cost-efficient financial data processing.</li>
+            <li>Integrated AI/ML components into data pipelines enabling fraud detection, risk scoring, and customer behavior analysis use cases.</li>
+            <li>Built real-time streaming pipelines with Kafka and Spark Streaming for transaction data — enabling low-latency, high-throughput ingestion.</li>
+            <li>Collaborated with data scientists on feature engineering, model training, and deployment workflows within production data systems.</li>
+            <li>Optimized SQL queries and ETL workflows via partitioning and tuning, improving pipeline performance by over 30%.</li>
+            <li>Designed and maintained data lakes and warehouses on Redshift and Snowflake for centralized storage and high-performance BI querying.</li>
+            <li>Implemented CI/CD pipelines and performed AWS cost optimization, reducing infrastructure expenses while maintaining availability.</li>
+          </ul>
+        </div>
+        <div class="tab-content">
+          <div class="exp-role">Data Engineer <span>@ Wild Fork Foods</span></div>
+          <div class="exp-meta">Coral Gables, FL · Retail · Oct 2021 – Aug 2023</div>
+          <ul class="exp-list">
+            <li>Developed scalable ETL/ELT pipelines for retail analytics, processing POS, inventory, and customer data to power business reporting.</li>
+            <li>Built cloud-based data warehouse solutions on Snowflake and Amazon Redshift, designing centralized data models for BI and analytics.</li>
+            <li>Designed and supported demand forecasting pipelines that improved inventory planning and reduced stockouts through data-driven insights.</li>
+            <li>Automated reporting pipelines and integrated data with Power BI and Tableau for real-time dashboards on sales and operational metrics.</li>
+            <li>Supported migration of legacy systems to AWS/Azure, enhancing scalability and reducing on-premise infrastructure dependencies.</li>
+            <li>Implemented validation and standardization frameworks to ensure consistency and accuracy across diverse retail data sources.</li>
+          </ul>
+        </div>
+        <div class="tab-content">
+          <div class="exp-role">Data Engineer <span>@ Aufait Technologies</span></div>
+          <div class="exp-meta">Bengaluru, India · Enterprise Consulting · Jun 2018 – Dec 2020</div>
+          <ul class="exp-list">
+            <li>Developed enterprise-grade ETL/ELT pipelines in Python and SQL for data ingestion, transformation, and integration across client systems.</li>
+            <li>Built integration workflows to connect APIs, databases, and cloud platforms for seamless data exchange across distributed systems.</li>
+            <li>Designed reusable components and frameworks that increased development efficiency and reduced redundancy across multiple projects.</li>
+            <li>Integrated AWS and Azure cloud services for scalable storage and compute, supporting migration of legacy data systems.</li>
+            <li>Collaborated with cross-functional teams in Agile environments through sprint planning and iterative delivery.</li>
+            <li>Documented architectures, workflows, and technical designs to support maintainability and future enhancements.</li>
+          </ul>
+        </div>
+        <div class="tab-content">
+          <div class="exp-role">Junior Data Engineer <span>@ Metalyst Forgings</span></div>
+          <div class="exp-meta">Pune, India · Manufacturing · Sep 2016 – May 2018</div>
+          <ul class="exp-list">
+            <li>Developed SQL-based reports and dashboards analyzing manufacturing and production data to surface efficiency and output trends.</li>
+            <li>Supported data pipelines for supply chain and production systems, ensuring smooth flow across procurement, inventory, and logistics.</li>
+            <li>Performed data cleaning, transformation, and validation on large datasets to improve accuracy for reporting and analytics.</li>
+            <li>Designed basic data models and schemas for reporting use cases and structured datasets for efficient querying.</li>
+            <li>Built dashboards for KPI tracking, giving stakeholders visibility into production metrics and performance indicators.</li>
+            <li>Implemented validation checks and standardization processes to reduce discrepancies across data sources.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section id="projects">
+    <div class="section-label">04. Some Things I've Built</div>
+    <h2 class="section-title">Selected Projects</h2>
+    <div class="projects-grid">
+
+      <div class="project-card">
+        <div class="project-icon">🏥</div>
+        <div class="project-title">AI-Integrated Healthcare Data Platform</div>
+        <div class="project-client">// Mercy Health</div>
+        <div class="project-desc">
+          Architected a HIPAA-compliant ETL/ELT platform processing EHR, claims,
+          and clinical datasets across multiple hospital systems — with AI/ML
+          pipelines powering patient risk scoring, readmission prediction, and
+          operational forecasting use cases.
+        </div>
+        <div class="project-tags">
+          <span class="tag">PySpark</span>
+          <span class="tag">SageMaker</span>
+          <span class="tag">Airflow</span>
+          <span class="tag">HIPAA</span>
+          <span class="tag">MLOps</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-icon">🧠</div>
+        <div class="project-title">ML Feature Store &amp; Training Pipelines</div>
+        <div class="project-client">// Mercy Health · Prudential</div>
+        <div class="project-desc">
+          Designed and built feature-engineering pipelines feeding Feast and
+          Tecton feature stores, enabling data scientists to serve consistent
+          training and inference features across healthcare risk models and
+          financial fraud-detection workflows.
+        </div>
+        <div class="project-tags">
+          <span class="tag">Feast</span>
+          <span class="tag">Tecton</span>
+          <span class="tag">SageMaker</span>
+          <span class="tag">Feature Engineering</span>
+          <span class="tag">MLOps</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-icon">⚡</div>
+        <div class="project-title">Real-Time Fraud Detection Pipeline</div>
+        <div class="project-client">// Prudential Financial</div>
+        <div class="project-desc">
+          Built a low-latency streaming pipeline using Kafka and Spark Streaming
+          to ingest and process financial transaction data at high throughput —
+          powering fraud detection, risk scoring, and customer behavior analysis
+          models in near real-time.
+        </div>
+        <div class="project-tags">
+          <span class="tag">Kafka</span>
+          <span class="tag">Spark Streaming</span>
+          <span class="tag">AWS EMR</span>
+          <span class="tag">ML Integration</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-icon">📊</div>
+        <div class="project-title">Cloud Data Warehouse Migration</div>
+        <div class="project-client">// Prudential Financial</div>
+        <div class="project-desc">
+          Designed and migrated enterprise data lakes and warehouses to Redshift
+          and Snowflake. Tuned queries and partitioning strategies to improve
+          pipeline performance by 30%+ while reducing infrastructure costs.
+        </div>
+        <div class="project-tags">
+          <span class="tag">Snowflake</span>
+          <span class="tag">Redshift</span>
+          <span class="tag">AWS Glue</span>
+          <span class="tag">CI/CD</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-icon">🛒</div>
+        <div class="project-title">Retail Demand Forecasting Pipeline</div>
+        <div class="project-client">// Wild Fork Foods</div>
+        <div class="project-desc">
+          Built scalable ETL pipelines combining POS, inventory, and customer
+          data into a unified retail analytics layer. Supported demand
+          forecasting workflows that improved inventory planning and reduced
+          stockouts.
+        </div>
+        <div class="project-tags">
+          <span class="tag">Python</span>
+          <span class="tag">Spark</span>
+          <span class="tag">Snowflake</span>
+          <span class="tag">Power BI</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-icon">🔌</div>
+        <div class="project-title">API-Based Data Integration Framework</div>
+        <div class="project-client">// Aufait Technologies</div>
+        <div class="project-desc">
+          Designed a reusable framework for API-based integrations and
+          microservices, connecting databases, cloud platforms, and enterprise
+          apps. Reduced redundant development effort across multiple client
+          projects.
+        </div>
+        <div class="project-tags">
+          <span class="tag">Python</span>
+          <span class="tag">REST APIs</span>
+          <span class="tag">Microservices</span>
+          <span class="tag">AWS</span>
+          <span class="tag">Azure</span>
+        </div>
+      </div>
+
+      <div class="project-card">
+        <div class="project-icon">🏭</div>
+        <div class="project-title">Manufacturing Analytics Dashboards</div>
+        <div class="project-client">// Metalyst Forgings</div>
+        <div class="project-desc">
+          Developed SQL-based dashboards and reports for production and
+          supply-chain systems — giving operations teams visibility into
+          efficiency, output trends, and KPIs across manufacturing processes.
+        </div>
+        <div class="project-tags">
+          <span class="tag">SQL</span>
+          <span class="tag">Data Modeling</span>
+          <span class="tag">KPI Dashboards</span>
+          <span class="tag">ETL</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section id="contact" class="contact-section">
+    <div class="section-label">05. What's Next?</div>
+    <h2>Let's build something together.</h2>
+    <p>
+      I'm always open to conversations about data engineering, cloud platforms,
+      or interesting pipeline problems. If you have a role, a project, or just
+      want to connect — my inbox is open.
+    </p>
+    <a href="mailto:thippabattinipawan@gmail.com" class="btn btn-primary">
+      Say Hello
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+    </a>
+  </section>
+
+</main>
+
+<footer>
+  Designed &amp; built by Pawankumar Thippabattini · © <span id="year"></span>
+</footer>
+
+<script>
+  // Nav border on scroll
+  const nav = document.getElementById('nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 30);
+  });
+
+  // Experience tabs
+  const tabBtns = document.querySelectorAll('.tab-btn');
+  const tabContents = document.querySelectorAll('.tab-content');
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const idx = btn.dataset.tab;
+      tabBtns.forEach(b => b.classList.remove('active'));
+      tabContents.forEach(c => c.classList.remove('active'));
+      btn.classList.add('active');
+      tabContents[idx].classList.add('active');
+    });
+  });
+
+  // Year
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  // Reveal on scroll
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('section:not(.hero)').forEach(s => {
+    s.style.opacity = '0';
+    s.style.transform = 'translateY(30px)';
+    s.style.transition = 'opacity 0.7s ease, transform 0.7s ease';
+    observer.observe(s);
+  });
+</script>
+
+</body>
