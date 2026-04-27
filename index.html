@@ -950,7 +950,7 @@
       or interesting pipeline problems. If you have a role, a project, or just
       want to connect — my inbox is open.
     </p>
-    <a href="mailto:thippabattinipawan@gmail.com" class="btn btn-primary">
+    <a href="https://mail.google.com/mail/?view=cm&to=thippabattinipawan@gmail.com" target="_blank" rel="noopener" class="btn btn-primary">
       Say Hello
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
     </a>
@@ -963,13 +963,11 @@
 </footer>
 
 <script>
-  // Nav border on scroll
   const nav = document.getElementById('nav');
   window.addEventListener('scroll', () => {
     nav.classList.toggle('scrolled', window.scrollY > 30);
   });
 
-  // Experience tabs
   const tabBtns = document.querySelectorAll('.tab-btn');
   const tabContents = document.querySelectorAll('.tab-content');
   tabBtns.forEach(btn => {
@@ -982,10 +980,8 @@
     });
   });
 
-  // Year
   document.getElementById('year').textContent = new Date().getFullYear();
 
-  // Reveal on scroll
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (e.isIntersecting) {
@@ -1004,3 +1000,4 @@
 </script>
 
 </body>
+</html>
